@@ -1,0 +1,64 @@
+# ENV=local
+# BASE_URL=http://localhost
+# PORT=6001
+# IS_SECURE=false
+# SSL_CERT_BASE_PATH=
+
+# DB_MONGO_URL=mongodb://localhost:27017/Pet-guest
+
+# JWT_SECRET=SkJ(&^s98kj
+# JWT_EXPIRES_IN=8760h
+
+# APP_NAME=Pet-guest
+
+# APP_REDIRECT_URL = https://petsguest.page.link
+
+# MAIL_HOST=smtp.gmail.com
+# MAIL_PORT=587
+# MAIL_USERNAME=iroid.test1@gmail.com
+# MAIL_PASSWORD="kfxtjetfrprgwvmr"
+# MAIL_ENCRYPTION=tls
+
+APP_NAME='Dating App'
+PORT =  7002
+BASE_URL = http://localhost
+IS_SECURE = false 
+SSL_CERT_BASE_PATH =
+ENV="development"
+
+MAIL_HOST = smtp.gmail.com
+MAIL_PORT = 587
+MAIL_USERNAME = shreya.iroidsolutions@gmail.com
+MAIL_PASSWORD = "ovxqvjbunlekrpfs"
+MAIL_ENCRYPTION = tls
+
+# MONGO_DB_URL = mongodb://localhost:27017/dating-app
+MONGO_DB_URL = 'mongodb://0.0.0.0:27017/dating-app'
+
+
+
+
+.babelrc
+
+
+{
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "edge": "17",
+            "firefox": "60",
+            "chrome": "67",
+            "safari": "11.1"
+          },
+          "useBuiltIns": "usage",
+          "corejs": "3.6.4"
+        }
+      ]
+    ]
+  }
+
+// {
+//     "presets": ["@babel/preset-env"]
+// }

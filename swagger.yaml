@@ -1,0 +1,418 @@
+openapi: 3.0.0
+
+info:
+  title: API Title
+  description: OpenAPI specification for dating app
+  version: 1.0.0
+
+components:
+  securitySchemes:
+    bearerAuth:
+      description: "#### Example: Bearer [TOKEN]"
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    success:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: success
+    GetTokens:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: ey2ace6et98s1ncjasd
+                  refreshToken:
+                    type: string
+                    example: def50"200"75819e4748adef0566c3b41437f2b7e3
+    GetLoginResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  _id:
+                    type: integer
+                    example: 643d4d03ae23825006d11937
+                  firstName:
+                    type: string
+                    example: John
+                  lastName:
+                    type: string
+                    example: wick
+                  profileImage:
+                    type: string
+                    example: http://example.com/static/file_697929e031dfb468c04126e26845f03c1610166680033.jpeg
+                  email:
+                    type: string
+                    example: john@gmail.com
+                  phoneNo:
+                    type: string
+                    example: +919299025650
+                  auth:
+                    type: object
+                    properties:
+                      tokenType:
+                        type: string
+                        example: Bearer
+                      accessToken:
+                        type: string
+                        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo1LCJwaG9uZV9udW1iZXIiOiIrOTEgNzk5MDA1MzE3MCIsImZpcnN0X25hbWUiOiJ0ZXN0c2RzZHNkc2RzZHNkcyIsI
+                      refreshToken:
+                        type: string
+                        example: DGptc0miW9AXKCDl6H7RMMHlDcruUbPrwOowslSHiVOyYYJeFhRW1F2XKIrrfUCRIoG1lRMUfEQKSxX3TApl1Aw6641YkAGJhi6yQgr06PrZZuPFddYBvr
+                      expiresIn:
+                        type: integer
+                        example: 31536000
+    User:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  _id:
+                    type: integer
+                    example: 643d4d03ae23825006d11937
+                  firstName:
+                    type: string
+                    example: John
+                  lastName:
+                    type: string
+                    example: wick
+                  profileImage:
+                    type: string
+                    example: http://example.com/static/file_697929e031dfb468c04126e26845f03c1610166680033.jpeg
+                  type:
+                    type: number
+                    example: 2
+                  email:
+                    type: string
+                    example: john@gmail.com
+                  isEmailVerified:
+                    type: boolean
+                    example: true
+                  bio:
+                    type: string
+                    example: My best friend has a fur and a tail. Dogs are not our whole life, but they make our lives whole 🐶🙂
+                  address:
+                    type: string
+                    example: NY, Kellogg Rd New Hartford, 24
+                  latitude:
+                    type: string
+                    example: "21.1702"
+                  longitude:
+                    type: string
+                    example: "21.1702"
+    UnauthorizedError:
+      description: |
+        - Invalid credentials
+        - Expired access or refresh token
+        - Revoked access or refresh token
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Unauthorized
+    NoContent:
+      description: |
+        - Empty body content
+      content:
+        application/json:
+          schema:
+            type: object
+    UnprocessableEntity:
+      description: Validation errors
+      content:
+        application/json:
+          schema:
+            type: object
+    Conflict:
+      description: Account already registered with given email
+      content:
+        application/json:
+          schema:
+            type: object
+    PreconditionFailedException:
+      description: Account does not exist
+      content:
+        application/json:
+          schema:
+            type: object
+paths:
+  /auth/register:
+     post:
+      description: register
+      summary: Create new account
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: Shreya
+                lastName:
+                  type: string
+                  example: Kamawala
+                email:
+                  type: string
+                  format: email
+                  example: shrea@mailinator.com
+                password:
+                  type: string
+                  example: password
+                phoneNo:
+                  type: string
+                  example: +919687855950
+                profileImage:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          $ref: "#/components/responses/GetLoginResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+        "409":
+          $ref: "#/components/responses/Conflict"
+
+  /auth/verify-otp:
+    post:
+        summary: Verify OTP
+        description: "[Type : 1 => registration otp  2 - forgot password otp ]"
+        tags:
+          - Auth
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  otp:
+                    type: string
+                    example: 1106
+                  email:
+                    type: string
+                    format: email
+                    example: shrea@mailinator.com
+                  type:
+                    type: integer
+                    example: 1
+        responses:
+          "200":
+            $ref: "#/components/responses/success"
+          "401":
+            $ref: "#/components/responses/UnauthorizedError"
+          "422":
+            $ref: "#/components/responses/UnprocessableEntity"
+
+  /auth/resend-otp:
+    post:
+        summary: Resend OTP
+        description: "[Type : 1 => registration otp  2 - forgot password otp ]"
+        tags:
+          - Auth
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    format: email
+                    example: shrea@mailinator.com
+                  type:
+                    type: integer
+                    example: 1
+        responses:
+          "200":
+            $ref: "#/components/responses/success"
+          "401":
+            $ref: "#/components/responses/UnauthorizedError"
+          "422":
+            $ref: "#/components/responses/UnprocessableEntity"
+          "412":
+            $ref: "#/components/responses/PreconditionFailedException"
+
+
+  /auth/login:
+    post:
+      description: Login
+      summary: Login Service
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: shrea@mailinator.com
+                password:
+                  type: string
+                  example: password
+
+      responses:
+        "200":
+          $ref: "#/components/responses/GetLoginResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+        "412":
+          $ref: "#/components/responses/PreconditionFailedException"
+
+  /users:
+    get:
+      summary: Get Users
+      description: Get users profile details 
+      tags:
+        - User
+      security:
+        - bearerAuth: []
+      # parameters:
+      #   - in: query
+      #     name: _id
+      #     required: false
+      #     schema:
+      #       type: string
+      responses:
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+        "200":
+          $ref: "#/components/responses/User"
+  
+  /users/forgot-password:
+    post:
+      summary: Forgot Password
+      description: "[Type : 1 => registration otp  2 - forgot password otp ]"
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: shrea@mailinator.com
+                type:
+                    type: integer
+                    example: 2
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /users/reset-password:
+    post:
+      summary: Reset Password
+      description: Reset Password
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: shrea@mailinator.com
+                newPassword:
+                  type: string
+                  example: password
+                confirmPassword:
+                  type: string
+                  example: password
+      responses:
+        "200":
+          $ref: "#/components/responses/success"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+  
+  # /fcm/token:
+  #   post:
+  #     description: |
+  #       - Register device token
+  #       <table style='border: 1px solid;width:auto;'>
+  #       <tr><td style='padding: 10px 10px 10px 10px;'><b>platform</b></td><td style='padding: 10px 10px 10px 10px;'><b>value</b></td></tr>
+  #       <tr><td style='padding: 10px 10px 10px 10px;'>iOS</td><td style='padding: 10px 10px 10px 10px;'>iOS</td></tr>
+  #       <tr><td style='padding: 10px 10px 10px 10px;'>Android</td><td style='padding: 10px 10px 10px 10px;'>Android</td></tr>
+  #       </table>
+  #     summary: Register device token
+  #     tags:
+  #       - FCM
+  #     security:
+  #       - bearerAuth: []
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               token:
+  #                 type: string
+  #                 example: def5020075819e4748adefe1f860566c3b41437f2b7e396db025b4d384e6b5db5911a3cfc22
+  #               deviceId:
+  #                 type: string
+  #                 example: e1f860566c3b41437f2b7e
+  #               platform:
+  #                 type: string
+  #                 example: iOS
+  #             required:
+  #               - token
+  #               - deviceId
+  #               - platform
+  #     responses:
+  #       "200":
+  #         $ref: "#/components/responses/GetTokens"
+  #       "401":
+  #         $ref: "#/components/responses/UnauthorizedError"
+  #       "422":
+  #         $ref: "#/components/responses/UnprocessableEntity"
